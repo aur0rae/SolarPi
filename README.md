@@ -51,7 +51,7 @@ mkdir build && cd build
 
 Next, set the proper environment variable and us GNU Make and CMake to automatically compile everything with the right flags.
 
-> 📝 Note: Running `make -jX` will allow you to use more of your processor during the compile process. According to the [Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/portage/make.conf#MAKEOPTS), you should set this to be either the number of threads you have, or your RAM in GB divided by 2 (whichever comes first).
+> 📝 Note: Running `make -jX` will allow you to use more of your processor during the compile process. According to the [Gentoo Wiki](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Stage#MAKEOPTS), you should set this to be either the number of threads you have, or your RAM in GB divided by 2 (whichever comes first).
 
 ```sh
 export PICO_SDK_PATH=/usr/share/pico-sdk
