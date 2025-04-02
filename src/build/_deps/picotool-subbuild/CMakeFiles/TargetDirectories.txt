@@ -1,3 +1,0 @@
-/home/aurora/Projects/ESC120/software/build/_deps/picotool-subbuild/CMakeFiles/picotool-populate.dir
-/home/aurora/Projects/ESC120/software/build/_deps/picotool-subbuild/CMakeFiles/edit_cache.dir
-/home/aurora/Projects/ESC120/software/build/_deps/picotool-subbuild/CMakeFiles/rebuild_cache.dir

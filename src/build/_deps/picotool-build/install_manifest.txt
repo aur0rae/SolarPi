@@ -1,5 +1,0 @@
-/home/aurora/Projects/ESC120/software/build/_deps/picotool/picotool
-/home/aurora/Projects/ESC120/software/build/_deps/picotool/picotoolTargets.cmake
-/home/aurora/Projects/ESC120/software/build/_deps/picotool/picotoolTargets-release.cmake
-/home/aurora/Projects/ESC120/software/build/_deps/picotool/picotoolConfig.cmake
-/home/aurora/Projects/ESC120/software/build/_deps/picotool/picotoolConfigVersion.cmake
