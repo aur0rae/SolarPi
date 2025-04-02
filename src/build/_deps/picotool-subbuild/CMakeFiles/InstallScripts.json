@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/aurora/Projects/ESC120/software/build/_deps/picotool-subbuild/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

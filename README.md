@@ -43,7 +43,7 @@ To compile and build the software from source, first clone the repo, then make a
 ```sh
 git clone https://github.com/aur0rae/SolarPi
 
-cd SolarPi/software
+cd SolarPi/src
 mkdir build && cd build
 ```
 

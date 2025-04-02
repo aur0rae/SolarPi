@@ -1,0 +1,14 @@
+# Target labels
+ picotoolBuild
+# Source files and their labels
+/home/aurora/Projects/ESC120/software/build/CMakeFiles/picotoolBuild
+/home/aurora/Projects/ESC120/software/build/CMakeFiles/picotoolBuild.rule
+/home/aurora/Projects/ESC120/software/build/CMakeFiles/picotoolBuild-complete.rule
+/home/aurora/Projects/ESC120/software/build/picotool/src/picotoolBuild-stamp/picotoolBuild-build.rule
+/home/aurora/Projects/ESC120/software/build/picotool/src/picotoolBuild-stamp/picotoolBuild-configure.rule
+/home/aurora/Projects/ESC120/software/build/picotool/src/picotoolBuild-stamp/picotoolBuild-download.rule
+/home/aurora/Projects/ESC120/software/build/picotool/src/picotoolBuild-stamp/picotoolBuild-install.rule
+/home/aurora/Projects/ESC120/software/build/picotool/src/picotoolBuild-stamp/picotoolBuild-mkdir.rule
+/home/aurora/Projects/ESC120/software/build/picotool/src/picotoolBuild-stamp/picotoolBuild-patch.rule
+/home/aurora/Projects/ESC120/software/build/picotool/src/picotoolBuild-stamp/picotoolBuild-test.rule
+/home/aurora/Projects/ESC120/software/build/picotool/src/picotoolBuild-stamp/picotoolBuild-update.rule
