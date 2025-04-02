@@ -49,11 +49,13 @@ mkdir build && cd build
 
 ### 2.2 COMPILE
 
-Next, GNU Make and CMake are used to automatically compile everything with the right flags.
+Next, set the proper environment variable and us GNU Make and CMake to automatically compile everything with the right flags.
 
 > 📝 Note: Running `make -jX` will allow you to use more of your processor during the compile process. According to the Gentoo Wiki, you should set this to be either the number of threads you have, or your RAM in GB divided by 2 (whichever comes first).
 
 ```sh
+export PICO_SDK_PATH=/usr/share/pico-sdk
+
 cmake ..
 make -j10 # This should be changed depending on your processor
 ```
