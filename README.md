@@ -68,7 +68,6 @@ From there, simply drag and drop the `.uf2` file from the build directory onto t
 
 ## Credits
 
-Big thanks to both of these projects for providing an excellent starting point and trivializing (relatively) the process for me!
+Big thanks to Raspberry Pi for providing an excellent starting point and trivializing (relatively) the process for me!
 
 - Raspberry Pi's [C/C++ SDK](https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html)
-- endeavor85's [MCP3008 library](https://github.com/endeavor85/pico-mcp3008)
