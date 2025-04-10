@@ -1,5 +1,3 @@
-# Make sure to run `export PICO_SDK_PATH=/usr/share/pico-sdk`
-
 cmake_minimum_required(VERSION 3.13)
 include(pico_sdk_import.cmake)
 
@@ -11,9 +9,6 @@ pico_sdk_init()
 add_executable(solar
     solar.c
 )
-
-pico_enable_stdio_usb(solar 1)
-pico_enable_stdio_uart(solar 1)
 
 pico_add_extra_outputs(solar)
 
