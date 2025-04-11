@@ -12,4 +12,8 @@ add_executable(solar
 
 pico_add_extra_outputs(solar)
 
-target_link_libraries(solar pico_stdlib)
+target_link_libraries(solar pico_stdlib hardware_adc)
+
+# Enable usb output for debugging
+pico_enable_stdio_usb(solar 1)
+pico_enable_stdio_uart(solar 0)

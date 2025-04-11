@@ -1,44 +1,63 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
+#include "hardware/adc.h"
 
-unsigned int servo1 = 0;  /* Servo handling horizontal rotation     */
-unsigned int servo2 = 1;  /* Servo handling vertical positioning    */
-unsigned int inter = 2;   /* Interrupt pin to shut down the program */
-unsigned int led = 25;    /* Built-in LED - no connection           */
+/* Set up variables for servo and measurement pins */
+unsigned int servo0 = 0, servo1 = 1;
+unsigned int adc0 = 26, adc1 = 27;
+
+/* Set up variables for interrupt and on-board LED */
+unsigned int inter = 2;
+unsigned int led = 25;
 
 /* Function prototypes */
 void gpio_callback(unsigned int inter, uint32_t events);
 void mvservo(unsigned int pos, unsigned int servo);
-void error(void);
 
 /* Main function */
 int main(void) {
     /* Initialize the GPIO */
     stdio_init_all();
+    adc_init();
 
     /* Create an array to initialize pins cleaner */
-    unsigned int arr[] = {led, servo1, servo2};
+    unsigned int gpio[] = {servo0, servo1, led};
+    unsigned int adc[] = {adc0, adc1};
 
-    for(unsigned int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++) {
-        gpio_init(arr[i]);
-        gpio_set_dir(arr[i], GPIO_OUT);
+    /* Initialize the main GPIO pins */
+    for(unsigned int i = 0; i < sizeof(gpio) / sizeof(gpio[0]); i++) {
+        gpio_init(gpio[i]);
+        gpio_set_dir(gpio[i], GPIO_OUT);
+    }
+
+    /* Initialize both ADC channels */
+    for(unsigned int i = 0; i < sizeof(adc) / sizeof(adc[0]); i++) {
+        adc_gpio_init(adc[i]);
     }
 
     /* Initialize the interrupt pin */
     gpio_set_irq_enabled_with_callback(inter, GPIO_IRQ_EDGE_RISE, true, &gpio_callback);
 
-    /* Loop to go from position 0 - 180 */
+    /* Just to check the status of main for troubleshooting */
     while(1) {
-        for(unsigned int i = 0; i < 180; i++) {
-            mvservo(i, servo1);
-        }
+        printf("%s", "Running as intended (PROCESS - MAIN)...\n");
+        sleep_ms(10000);
     }
 }
 
 /* Function to handle interrupts */
 void gpio_callback(unsigned int inter, uint32_t events) {
-    error();
+    /* Blink an LED forever until reboot */
+    printf("%s", "INTERRUPT! Halting...");
+
+    while(1) {
+        gpio_put(led, 1);
+        busy_wait_us_32(500000);
+
+        gpio_put(led, 0);
+        busy_wait_us_32(500000);
+    }
 }
 
 /* Function to move a servo to a specific position */
@@ -60,16 +79,9 @@ void mvservo(unsigned int pos, unsigned int servo) {
     }
 
     else {
-        error();
-    }
-}
-
-/* Function to handle errors and lock up until reboot */
-void error(void) {
-    while(1) {
-        for(unsigned int i = 0; i < 2; i++) {
-            gpio_put(led, i);
-            busy_wait_us_32(500000);
+        while(1) {
+            /* LED purgatory */
+            gpio_put(led, 1);
         }
     }
 }
