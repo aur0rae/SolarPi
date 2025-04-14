@@ -49,13 +49,13 @@ int main(void) {
     while(true) {
         /* Move servo 0 (horizontal) */
         bool adjh = mvservo(servo0, adc0);
-        if(adj) {
+        if(adjh) {
             return(1);
         }
 
         /* Move servo 1 (vertical) */
         bool adjv = mvservo(servo0, adc0);
-        if(adj) {
+        if(adjv) {
             return(1);
         }
     }
