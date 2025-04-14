@@ -1,19 +1,22 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 #include "hardware/adc.h"
 
 /* Set up variables for servo and measurement pins */
-unsigned int servo0 = 0, servo1 = 1;
-unsigned int adc0 = 26, adc1 = 27;
+unsigned const int servo0 = 0;
+unsigned const int servo1 = 1;
+unsigned const int adc0 = 26;
+unsigned const int adc1 = 27;
 
 /* Set up variables for interrupt and on-board LED */
-unsigned int inter = 2;
-unsigned int led = 25;
+unsigned const int inter = 2;
+unsigned const int led = 25;
 
 /* Function prototypes */
 void gpio_callback(unsigned int inter, uint32_t events);
-void mvservo(unsigned int pos, unsigned int servo);
+int mvservo(unsigned int servo, unsigned int adc);
 
 /* Main function */
 int main(void) {
@@ -40,18 +43,28 @@ int main(void) {
     gpio_set_irq_enabled_with_callback(inter, GPIO_IRQ_EDGE_RISE, true, &gpio_callback);
 
     /* Just to check the status of main for troubleshooting */
-    while(1) {
-        printf("%s", "Running as intended (PROCESS - MAIN)...\n");
-        sleep_ms(10000);
+    unsigned int n = 0;
+    float pos = 0;
+
+    while(true) {
+        /* Move servo 0 (horizontal) */
+        bool adjh = mvservo(servo0, adc0);
+        if(adj) {
+            return(1);
+        }
+
+        /* Move servo 1 (vertical) */
+        bool adjv = mvservo(servo0, adc0);
+        if(adj) {
+            return(1);
+        }
     }
 }
 
 /* Function to handle interrupts */
 void gpio_callback(unsigned int inter, uint32_t events) {
     /* Blink an LED forever until reboot */
-    printf("%s", "INTERRUPT! Halting...");
-
-    while(1) {
+    while(true) {
         gpio_put(led, 1);
         busy_wait_us_32(500000);
 
@@ -61,27 +74,58 @@ void gpio_callback(unsigned int inter, uint32_t events) {
 }
 
 /* Function to move a servo to a specific position */
-void mvservo(unsigned int pos, unsigned int servo) {
-    /* Make sure the value passed in is within range 0 - 180 */
-    if(pos <= 180) {
-        /* Scale the ontime from 550us to 2400us based on position variable */
-        unsigned int ontime = ((pos / 3) * 40) + 550;
+int mvservo(unsigned int servo, unsigned int adc) {
+    /* Testing threshold values for 12 bit ADC - 0-4095 */
+    unsigned const int high = 3071;
+    unsigned const int low = 1023;
 
-        /* Send a few pulses to make sure it reads right */
-        for(unsigned int c = 0; c < 5; c++) {
-            /* Set position via duty cycle */
-            gpio_put(servo, 1);
-            sleep_us(ontime);
+    /* Create variables to track the ontime of each servo */
+    static unsigned int ontime0;
+    static unsigned int ontime1;
 
-            gpio_put(servo, 0);
-            sleep_us(20000 - ontime);
+    /* Create temporary variable that points to the selected servo */
+    unsigned int *ontime;
+    if(servo == 0) {
+        ontime = &ontime0;
+    }
+    else if(servo == 1) {
+        ontime = &ontime1;
+    }
+    else {
+        return(1);
+    }
+
+    /* Verify the servo is in range */
+    if(*ontime <= 3200 && *ontime >= 400) {
+        /* PWM the servo */
+        gpio_put(servo, 1);
+        sleep_us(*ontime);
+
+        gpio_put(servo, 0);
+        sleep_us(20000 - *ontime);
+
+        /* Collect input from the desired ADC */
+        adc_select_input(adc);
+        unsigned int temp = adc_read();
+
+        /* Adjust the value of the ontime for selected servo */
+        if(temp >= high) {
+            *ontime--;
+        }
+        else if(temp <= low) {
+            *ontime++;
+        }
+        else {
+            return(0);
         }
     }
 
+    /* Reset to halfway - this is a temporary solution */
     else {
-        while(1) {
-            /* LED purgatory */
-            gpio_put(led, 1);
-        }
+        gpio_put(servo, 1);
+        sleep_us(1800);
+
+        gpio_put(servo, 1);
+        sleep_us(18200);
     }
 }
