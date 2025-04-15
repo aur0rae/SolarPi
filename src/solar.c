@@ -95,8 +95,6 @@ int mvservo(unsigned int servo, unsigned int adc) {
         return(1);
     }
 
-    /* Verify the servo is in range */
-    gpio_put(led, 1);
     /* PWM the servo */
     gpio_put(servo, 1);
     sleep_us(*ontime);
