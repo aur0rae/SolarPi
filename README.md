@@ -38,12 +38,13 @@ paru -S pico-sdk cmake
 
 ### 2.1 SETUP
 
-To compile and build the software from source, first clone the repo, then make and navigate to a build directory under the software folder.
+To compile and build the software from source, first clone the repo, then make and navigate to a build directory under the software folder. You will also need to copy a file into the source directory.
 
 ```sh
 git clone https://github.com/aur0rae/SolarPi
 
 cd SolarPi/src
+cp /usr/share/pico-sdk/external/pico_sdk_import.cmake .
 mkdir build && cd build
 ```
 

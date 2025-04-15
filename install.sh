@@ -36,6 +36,7 @@ fi
 
 echo "Building..."
 cd src
+cp /usr/share/pico-sdk/external/pico_sdk_import.cmake .
 mkdir build && cd build
 
 export PICO_SDK_PATH=/usr/share/pico-sdk
