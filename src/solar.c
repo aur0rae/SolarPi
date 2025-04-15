@@ -10,6 +10,10 @@ unsigned const int servo1 = 1;
 unsigned const int adc0 = 26;
 unsigned const int adc1 = 27;
 
+/* Create variables to track the ontime of each servo */
+unsigned int ontime0 = 0;
+unsigned int ontime1 = 0;
+
 /* Set up variables for interrupt and on-board LED */
 unsigned const int inter = 2;
 unsigned const int led = 25;
@@ -54,7 +58,7 @@ int main(void) {
         }
 
         /* Move servo 1 (vertical) */
-        bool adjv = mvservo(servo0, adc0);
+        bool adjv = mvservo(servo1, adc1);
         if(adjv) {
             return(1);
         }
@@ -76,19 +80,15 @@ void gpio_callback(unsigned int inter, uint32_t events) {
 /* Function to move a servo to a specific position */
 int mvservo(unsigned int servo, unsigned int adc) {
     /* Testing threshold values for 12 bit ADC - 0-4095 */
-    unsigned const int high = 3071;
-    unsigned const int low = 1023;
-
-    /* Create variables to track the ontime of each servo */
-    static unsigned int ontime0;
-    static unsigned int ontime1;
+    unsigned const int high = 2047;
+    unsigned const int low = 2047;
 
     /* Create temporary variable that points to the selected servo */
-    unsigned int *ontime;
-    if(servo == 0) {
+    unsigned int *ontime = 0;
+    if(servo == servo0) {
         ontime = &ontime0;
     }
-    else if(servo == 1) {
+    else if(servo == servo1) {
         ontime = &ontime1;
     }
     else {
@@ -96,36 +96,26 @@ int mvservo(unsigned int servo, unsigned int adc) {
     }
 
     /* Verify the servo is in range */
-    if(*ontime <= 3200 && *ontime >= 400) {
-        /* PWM the servo */
-        gpio_put(servo, 1);
-        sleep_us(*ontime);
+    gpio_put(led, 1);
+    /* PWM the servo */
+    gpio_put(servo, 1);
+    sleep_us(*ontime);
 
-        gpio_put(servo, 0);
-        sleep_us(20000 - *ontime);
+    gpio_put(servo, 0);
+    sleep_us(20000 - *ontime);
 
-        /* Collect input from the desired ADC */
-        adc_select_input(adc);
-        unsigned int temp = adc_read();
+    /* Collect input from the desired ADC */
+    adc_select_input(adc);
+    unsigned int temp = adc_read();
 
-        /* Adjust the value of the ontime for selected servo */
-        if(temp >= high) {
-            *ontime--;
-        }
-        else if(temp <= low) {
-            *ontime++;
-        }
-        else {
-            return(0);
-        }
+    /* Adjust the value of the ontime for selected servo */
+    if(temp > high && *ontime > 400) {
+        *ontime -= 5;
     }
-
-    /* Reset to halfway - this is a temporary solution */
+    else if(temp < low && *ontime < 2125) {
+        *ontime += 5;
+    }
     else {
-        gpio_put(servo, 1);
-        sleep_us(1800);
-
-        gpio_put(servo, 1);
-        sleep_us(18200);
+        return(0);
     }
 }
